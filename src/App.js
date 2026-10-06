@@ -21,6 +21,12 @@ export default function App() {
        {id: 8, title:"Plan next sprint", desc:"Discuss and prioritize upcoming tasks", assignee:"Alice Smith", due:"May 5, 2025", priority: "Low", status:"Pending", done: false},
   ])
 
+      const [showForm, setShowForm] = useState(false);
+      const [newTitle, setNewTitle] = useState("");
+      const [newAssignee, setNewAssignee] = useState("");
+      const [newPriority, setNewPriority] = useState("Medium");
+      const [newStatus, setNewStatus] = useState("To Do");
+
       const [activeFilter, setActiveFilter]= useState("All");
       const [search, setSearch]=useState("");
       const [menuOpen, setMenuOpen] = useState(false);
@@ -30,6 +36,28 @@ export default function App() {
           tasks.map((task) => task.id === id ? {...task, done: !task.done, status:!task.done ? "Completed" : "To Do"} :task)
 
         );
+      }
+
+
+            function addTask() {
+        const newTask = {
+          id: Date.now(),
+          title: newTitle,
+          desc: "",
+          assignee: newAssignee,
+          due: "TBD",
+          priority: newPriority,
+          status: newStatus,
+          done: false,
+        };
+
+        setTasks([...tasks, newTask]);
+
+        setNewTitle("");
+        setNewAssignee("");
+        setNewPriority("Medium");
+        setNewStatus("To Do");
+        setShowForm(false);
       }
 
       const visibleTask = tasks.filter((task) => {
@@ -138,6 +166,83 @@ export default function App() {
 
       </div>
 
+             <button
+  onClick={() => setShowForm(!showForm)}
+  style={{
+    background: "#2563eb",
+    color: "white",
+    border: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "600"
+  }}
+>
+  + Add Task
+</button>
+
+{showForm && (
+  <div style={{
+    border: "1px solid #e2e8f0",
+    padding: "16px",
+    margin: "12px 0",
+    borderRadius: "10px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    maxWidth: "320px",
+    background: "#f8fafc"
+  }}>
+    <input
+      placeholder="Task title"
+      value={newTitle}
+      onChange={(e) => setNewTitle(e.target.value)}
+      style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+    />
+    <input
+      placeholder="Assignee"
+      value={newAssignee}
+      onChange={(e) => setNewAssignee(e.target.value)}
+      style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+    />
+
+    <select
+      value={newPriority}
+      onChange={(e) => setNewPriority(e.target.value)}
+      style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+    >
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+
+    <select
+      value={newStatus}
+      onChange={(e) => setNewStatus(e.target.value)}
+      style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+    >
+      <option value="To Do">To Do</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+      <option value="Pending">Pending</option>
+    </select>
+
+    <button
+      onClick={addTask}
+      style={{
+        background: "#16a34a",
+        color: "white",
+        border: "none",
+        padding: "8px 16px",
+        borderRadius: "8px",
+        cursor: "pointer",
+        fontWeight: "600"
+      }}
+    >
+      Save Task
+    </button>
+  </div>
+)}
       <h1>Assigned Tasks</h1>
 
       <div style={{display:"flex", gap:"8px", marginBottom:"16px"}}>
